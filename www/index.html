@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.js"></script>
+  <!--<script type="text/javascript" src="lib/Mustache/mustache.js"></script>-->
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300italic,300,500,400italic,500italic,700,700italic" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="css/signup.css">
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+  
+
+  
+  
+</head>
+<body>
+  <ons-navigator swipeable id="onsNavigator" page="home.html">
+      
+  </ons-navigator>
+  
+  <template id="add.html">
+  <ons-page id="add">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Home</ons-back-button></div>
+      <div class="center">Neuer Eintrag</div>
+    </ons-toolbar>
+
+    <ons-list>
+        <ons-list-item>
+            <input type="text" class="text-input width-full" placeholder="Fach" id="subjectInput" value="">
+        </ons-list-item>
+        <ons-list-item>
+            <input type="text" class="textarea textarea width-full" rows="3" placeholder="Beschreibung" id="descriptionInput" value="">
+        </ons-list-item>
+    
+        <ons-list-header>Optionen</ons-list-header>
+        <ons-list-item tappable>
+          <label class="left">
+            <ons-checkbox input-id="share"></ons-checkbox>
+          </label>
+          <label for="share" class="center">
+            Freigeben
+          </label>
+        </ons-list-item>
+        <ons-list-item>
+            <label>
+                <ons-select id="groupSelect">
+                    <option value="10m">10m<option>
+                </ons-select>
+            </label>
+        </ons-list-item>
+        <ons-list-item tappable>
+          <label class="left">
+            <ons-radio name="type" input-id="assignment" checked></ons-radio>
+          </label>
+          <label for="assignment" class="center">
+            Aufgabe
+          </label>
+        </ons-list-item>
+        
+        <ons-list-item tappable>
+          <label class="left">
+            <ons-radio name="type" input-id="appointment"></ons-radio>
+          </label>
+          <label for="appointment" class="center">
+            Termin
+          </label>
+        </ons-list-item>
+        
+    </ons-list>
+    <ons-fab id="saveFab" position="bottom right" onclick="saveData()">
+        <ons-icon icon="md-check"></ons-icon>
+    </ons-fab>
+  </ons-page>
+  </template>
+  
+  <template id="signup.html">
+   <ons-page id="signup">
+    <ons-toolbar>
+      <div class="left" id="leftAccountToolbar"></div>
+      <div class="center">
+        Signup
+      </div>
+    </ons-toolbar>
+    <div class="formarea">
+        <!--<div class="form-row">
+          <input type="text" class="text-input--underbar width-half" placeholder="First" value="">
+          <input type="text" class="text-input--underbar width-half" placeholder="Last" value="" style="border-width-left: 1px">
+        </div>-->
+
+        <div class="form-row">
+          <input type="text" class="text-input--underbar width-full" placeholder="Email" id="email" value="">
+        </div>
+
+        <div class="form-row">
+          <input type="password" class="text-input--underbar width-full" placeholder="Passwort" id="password" value="">
+        </div>
+
+        <div class="lucent">
+          <p class="note">Passwort - mindest 6 Zeichen</p>
+        </div>
+        <div class="form-row">
+        
+        <div class="form-row"> <ons-button modifier="large" onclick="handleSignup()">Registrieren</ons-button></ons-col></div>
+        
+        <div class="form-row"> <ons-button modifier="large" onclick="toggleSignin()">Einloggen</ons-button> </ons-col> </div>
+
+        <div class="form-row"><ons-button class="button--outline large" onclick = "noSignup()">Ohne Anmeldung testen</ons-button></div>
+        
+      </div>
+    </ons-page>
+  </template>
+  
+  <!--
+  <template id="SignupDetail.html">
+   <ons-page id="signupdetail">
+    <ons-toolbar>
+      <div class="left" id="leftAccountToolbar"></div>
+      
+      <div class="center">
+        Details
+      </div>
+    </ons-toolbar>
+    <div class="formarea">
+        <!--<div class="form-row">
+          <input type="text" class="text-input--underbar width-half" placeholder="First" value="">
+          <input type="text" class="text-input--underbar width-half" placeholder="Last" value="" style="border-width-left: 1px">
+        </div>
+
+        <div class="form-row">
+          <input type="text" class="text-input--underbar width-full" placeholder="Benutzername" id="nickname" value="">
+        </div>
+
+        <div class="form-row">
+          <ons-select id="school-sel" onchange="something()">
+            <option value="">Basic</option>
+            <option value="">Material</option>
+            <option value="">Underbar</option>
+          </ons-select>
+        </div>
+
+        
+        <div class="form-row"> <ons-button modifier="large" onclick='document.getElementById("onsNavigator").pushPage("courseSelect.html")'>Weiter</ons-button></ons-col></div>
+
+        
+      </div>
+    </ons-page>
+  </template>
+  -->
+  
+  <template id="account.html">
+    <ons-page id="add">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Home</ons-back-button></div>
+    </ons-toolbar>
+    <p> hier siehst du deine Accountdetails...not yet</p>
+    
+    </ons-page>
+  </template>
+  
+  <template id="dialog.html">
+  <ons-dialog id="HomeworkDialog">
+    <div style="text-align: left; padding: 10px;">
+
+
+    </div>
+    <ons-bottom-toolbar>
+        <div class="left"><ons-toolbar-button>Del</ons-toolbar-button></div>
+        <div class="center"><ons-toolbar-button>Cha</ons-toolbar-button></div>
+        <div class="right"><ons-toolbar-button>OK</ons-toolbar-button></div>
+    </ons-bottom-toolbar>
+  </ons-dialog>
+  </template>
+  
+    <template id="home.html">
+    <ons-page id = "home">
+      <ons-toolbar>
+        <div class="center">
+          Hausaufgaben
+        </div>
+        <div class="right">
+          <ons-toolbar-button id="accountButton"><ons-icon icon="ion-person, material:md-account"></ons-icon></ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+      <ons-list id="homeworklist">
+      
+          
+      </ons-list>
+      <ons-fab id="AddFab" position="bottom right">
+        <ons-icon icon="md-plus"></ons-icon>
+      </ons-fab>
+    </ons-page>
+  </template>
+  
+  <script src="js/main.js"></script>
+  <script src="js/signinup.js"></script>
+
+</body>
+
+</html>
